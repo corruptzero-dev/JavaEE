@@ -15,7 +15,7 @@ public class Main {
             
             SomeClass clazz2 = mapper.readValue(new File("src/main/resources/clazz.json"), SomeClass.class);
         } catch (Exception e) {
-            log.error("object mapper exception" + e.getMessage());
+            log.error("Object Mapper exception" + e.getMessage());
             System.out.println(e.getMessage());
         }
     }
