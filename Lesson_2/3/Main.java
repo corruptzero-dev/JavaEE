@@ -10,7 +10,9 @@ public class Main {
         try{
             String json = mapper.writeValueAsString(clazz);
             System.out.println(json);
+            
             mapper.writeValue(new File("src/main/resources/clazz.json"), clazz);
+            
             SomeClass clazz2 = mapper.readValue(new File("src/main/resources/clazz.json"), SomeClass.class);
         } catch (Exception e) {
             log.error("object mapper exception" + e.getMessage());
