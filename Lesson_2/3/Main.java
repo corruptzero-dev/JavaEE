@@ -1,7 +1,12 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
+/*
+    TODO
+    преобразование объекта в json строку, 
+    запись json в файл, 
+    чтение json из файла
+*/
 @Slf4j
 public class Main {
     public static void main(String[] args) {
@@ -9,7 +14,7 @@ public class Main {
         SomeClass clazz = new SomeClass("text", 21);
         try{
             String json = mapper.writeValueAsString(clazz);
-            System.out.println(json);
+            log.info(json);
             
             mapper.writeValue(new File("src/main/resources/clazz.json"), clazz);
             
