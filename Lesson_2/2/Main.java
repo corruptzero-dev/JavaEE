@@ -2,7 +2,7 @@ package ru.corruptzero;
 
 import java.util.Objects;
 
-/*  TODO
+/*   TODO
      Пример upcast и downcast,
      реализовать equals и hashcode,
      перегрузку и переопределение методов,
