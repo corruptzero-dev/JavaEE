@@ -33,6 +33,9 @@ class SomeParentClass implements SomeInterface {
     public void someMethod() {
         System.out.println("someMethod");
     }
+    public void someMethod(String s){
+         System.out.println("someMethod " + s);
+    }
 }
 
 class SomeChildClass extends SomeParentClass implements SomeInterface {
