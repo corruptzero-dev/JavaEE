@@ -9,7 +9,7 @@ import java.util.Objects;
      интерфейс от которого наследуется два класса,
      пример полиформизма (как ArrayList, LinkedList и List)
  */
-class Parent implements SomeInterface {
+class SomeParentClass implements SomeInterface {
     String name;
 
     void printData() {
@@ -20,7 +20,7 @@ class Parent implements SomeInterface {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Parent parent = (Parent) o;
+        SomeParentClass parentClass = (SomeParentClass) o;
         return Objects.equals(name, parent.name);
     }
 
@@ -35,7 +35,7 @@ class Parent implements SomeInterface {
     }
 }
 
-class Child extends Parent implements SomeInterface {
+class SomeChildClass extends SomeParentClass implements SomeInterface {
     int age;
 
     @Override
@@ -48,7 +48,7 @@ class Child extends Parent implements SomeInterface {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        Child child = (Child) o;
+        SomeChildClass child = (SomeChildClass) o;
         return age == child.age;
     }
 
@@ -67,20 +67,20 @@ class Child extends Parent implements SomeInterface {
 public class Main {
     public static void main(String[] args) {
         //Upcasting and polymorphism
-        Parent obj1 = new Child();
-        Parent obj2 = new Child();
+        SomeParentClass obj1 = new SomeChildClass();
+        SomeParentClass obj2 = new SomeChildClass();
         obj2.printData();
 
-        obj2 = new Parent();
+        obj2 = new SomeParentClass();
         obj1.printData();
         obj2.printData();
         System.out.println("------");
 
         //Downcasting
-        Parent p = new Child();
+        SomeParentClass p = new SomeChildClass();
         p.name = "parent";
 
-        Child c = (Child) p;
+        SomeChildClass c = (SomeChildClass) p;
 
         c.age = 18;
         System.out.println(c.name);
