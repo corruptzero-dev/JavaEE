@@ -88,32 +88,31 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/students/{id}")
-    public void patchResource(
+    @PatchMapping("{id}")
+    public ResponseEntity<User> patchResource(
             @PathVariable long id,
             @RequestBody User userData) {
+        Optional<User> user = repository.findById(id);
+        if (user.isPresent()) {
+            boolean needUpdate = false;
 
-        User user = repository
-                .findById(id).orElseThrow(RuntimeException::new);
-
-        boolean needUpdate = false;
-
-        if (StringUtils.hasLength(userData.getUsername())) {
-            user.setUsername(userData.getUsername());
-            needUpdate = true;
-        }
-
-        if (StringUtils.hasLength(userData.getEmail())) {
-            user.setEmail(userData.getEmail());
-            needUpdate = true;
-        }
-
-        if (StringUtils.hasLength(userData.getPassword())) {
-            user.setPassword(userData.getPassword());
-            needUpdate = true;
-        }
-        if (needUpdate) {
-            repository.save(user);
+            if (StringUtils.hasLength(userData.getUsername())) {
+                user.setUsername(userData.getUsername());
+                needUpdate = true;
+            }
+            if (StringUtils.hasLength(userData.getEmail())) {
+                user.setEmail(userData.getEmail());
+                needUpdate = true;
+            }
+            if (StringUtils.hasLength(userData.getPassword())) {
+                user.setPassword(userData.getPassword());
+                needUpdate = true;
+            }
+            if (needUpdate) {
+                return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
