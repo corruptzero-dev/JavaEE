@@ -1,0 +1,19 @@
+#.properties
+#spring.datasource.url=jdbc:postgresql://localhost:5432/lesson4?useSSL=false&characterEncoding=utf8&useUnicode=true
+#spring.datasource.username=postgres
+#spring.datasource.password=root
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL10Dialect
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.show-sql=true
+spring:
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lesson3plus?useSSL=false&characterEncoding=utf8&useUnicode=true
+    username: postgres
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true

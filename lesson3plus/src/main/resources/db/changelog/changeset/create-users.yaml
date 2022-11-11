@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users
+      author: corruptzero
+      changes:
+        - loadData:
+            catalogName: resources
+            encoding: UTF-8
+            file: users.csv
+            separator: ';'
+            tableName: users
