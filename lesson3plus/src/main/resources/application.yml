@@ -17,3 +17,7 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  data:
+    jdbc:
+      repositories:
+        enabled: false
