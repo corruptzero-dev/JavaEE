@@ -49,7 +49,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestParam String username, @RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<User> createUser(@RequestParam String username, 
+                                           @RequestParam String email, 
+                                           @RequestParam String password) {
         try {
             User user = new User();
             user.setUsername(username);
