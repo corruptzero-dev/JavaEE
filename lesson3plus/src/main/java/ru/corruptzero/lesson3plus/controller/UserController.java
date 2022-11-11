@@ -32,21 +32,24 @@ public class UserController {
             }
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Error getting all users: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        Optional<User> userData = userService.findById(id);
-        return userData.map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<User> userData = userService.findById(id);
+            return userData.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            log.error("Error getting user: " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestParam String username,
-                                           @RequestParam String email,
-                                           @RequestParam String password) {
+    public ResponseEntity<User> createUser(@RequestParam String username, @RequestParam String email, @RequestParam String password) {
         try {
             User user = new User();
             user.setUsername(username);
@@ -55,25 +58,27 @@ public class UserController {
             User _user = userService.save(user);
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error creating user: " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-                                           @RequestParam(required = false) String username,
-                                           @RequestParam(required = false) String email,
-                                           @RequestParam(required = false) String password) {
-        Optional<User> userData = userService.findById(id);
-        if (userData.isPresent()) {
-            User _user = userData.get();
-            if (username != null) _user.setUsername(username);
-            if (email != null) _user.setEmail(email);
-            if (password != null) _user.setPassword(password);
-            return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestParam(required = false) String username, @RequestParam(required = false) String email, @RequestParam(required = false) String password) {
+        try {
+            Optional<User> userData = userService.findById(id);
+            if (userData.isPresent()) {
+                User _user = userData.get();
+                if (username != null) _user.setUsername(username);
+                if (email != null) _user.setEmail(email);
+                if (password != null) _user.setPassword(password);
+                return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            log.error("Error updating user: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -89,31 +94,32 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<User> patchResource(
-            @PathVariable long id,
-            @RequestBody User userData) {
-        Optional<User> _user = repository.findById(id);
-        if (_user.isPresent()) {
-            User user = _user.get();
-            boolean needUpdate = false;
-
-            if (StringUtils.hasLength(userData.getUsername())) {
-                user.setUsername(userData.getUsername());
-                needUpdate = true;
+    public ResponseEntity<User> patchResource(@PathVariable long id, @RequestBody User userData) {
+        try {
+            Optional<User> _user = repository.findById(id);
+            if (_user.isPresent()) {
+                User user = _user.get();
+                boolean needUpdate = false;
+                if (StringUtils.hasLength(userData.getUsername())) {
+                    user.setUsername(userData.getUsername());
+                    needUpdate = true;
+                }
+                if (StringUtils.hasLength(userData.getEmail())) {
+                    user.setEmail(userData.getEmail());
+                    needUpdate = true;
+                }
+                if (StringUtils.hasLength(userData.getPassword())) {
+                    user.setPassword(userData.getPassword());
+                    needUpdate = true;
+                }
+                if (needUpdate) {
+                    return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+                }
             }
-            if (StringUtils.hasLength(userData.getEmail())) {
-                user.setEmail(userData.getEmail());
-                needUpdate = true;
-            }
-            if (StringUtils.hasLength(userData.getPassword())) {
-                user.setPassword(userData.getPassword());
-                needUpdate = true;
-            }
-            if (needUpdate) {
-                return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
-            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("Error patching user: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 }
