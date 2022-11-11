@@ -64,7 +64,10 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestParam(required = false) String username, @RequestParam(required = false) String email, @RequestParam(required = false) String password) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, 
+                                           @RequestParam(required = false) String username, 
+                                           @RequestParam(required = false) String email, 
+                                           @RequestParam(required = false) String password) {
         try {
             Optional<User> userData = userService.findById(id);
             if (userData.isPresent()) {
