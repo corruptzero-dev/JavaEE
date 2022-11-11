@@ -1,2 +1,2 @@
 # JavaEE
-JavaEE
+JavaEE practice
